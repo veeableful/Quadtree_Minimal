@@ -10,10 +10,12 @@ class Object;
 
 class Quadtree {
 public:
-							Quadtree( float x, float y, float width, float height, int level, int maxLevel );
+						Quadtree(float x, float y, float width, float height, int level, int maxLevel);
 
-	void					AddObject( Object *object );
-	vector<Object*>			GetObjectsAt( float x, float y );
+						~Quadtree();
+
+	void					AddObject(Object *object);
+	vector<Object*>				GetObjectsAt(float x, float y);
 	void					Clear();
 
 private:
@@ -21,9 +23,9 @@ private:
 	float					y;
 	float					width;
 	float					height;
-	int						level;
-	int						maxLevel;
-	vector<Object*>			objects;
+	int					level;
+	int					maxLevel;
+	vector<Object*>				objects;
 
 	Quadtree *				parent;
 	Quadtree *				NW;
@@ -31,7 +33,7 @@ private:
 	Quadtree *				SW;
 	Quadtree *				SE;
 
-	bool					Contains( Quadtree *child, Object *object );
+	bool					contains(Quadtree *child, Object *object);
 };
 
 #endif
