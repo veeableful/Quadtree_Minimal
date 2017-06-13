@@ -11,11 +11,10 @@ Quadtree::Quadtree(float _x, float _y, float _width, float _height, int _level, 
     level   (_level),
     maxLevel(_maxLevel)
 {
-    if (level == maxLevel) {
+    if (level == maxLevel)
         return;
-    }
 
-    const float halfWidth = width * 0.5f;
+    const float halfWidth  = width * 0.5f;
     const float halfHeight = height * 0.5f;
 
     NW = new Quadtree(x, y, halfWidth, halfHeight, level+1, maxLevel);
@@ -25,9 +24,8 @@ Quadtree::Quadtree(float _x, float _y, float _width, float _height, int _level, 
 }
 
 Quadtree::~Quadtree() {
-    if (level == maxLevel) {
+    if (level == maxLevel)
         return;
-    }
 
     delete NW;
     delete NE;
@@ -36,58 +34,47 @@ Quadtree::~Quadtree() {
 }
 
 void Quadtree::AddObject(Object *object) {
-    if (level == maxLevel) {
+    if (level == maxLevel)
         objects.push_back(object);
-        return;
-    }
-
-    if (contains(NW, object)) {
-        NW->AddObject(object); return;
-    } else if (contains(NE, object)) {
-        NE->AddObject(object); return;
-    } else if (contains(SW, object)) {
-        SW->AddObject(object); return;
-    } else if (contains(SE, object)) {
-        SE->AddObject(object); return;
-    }
-
-    if (contains(this, object)) {
+    else if (contains(NW, object))
+        NW->AddObject(object);
+    else if (contains(NE, object))
+        NE->AddObject(object);
+    else if (contains(SW, object))
+        SW->AddObject(object);
+    else if (contains(SE, object))
+        SE->AddObject(object);
+    else if (contains(this, object))
         objects.push_back(object);
-    }
 }
 
 vector<Object*> Quadtree::GetObjectsAt(float _x, float _y) {
-    if (level == maxLevel) {
-        return objects;
-    }
-
     vector<Object*> returnObjects, childReturnObjects;
-    if (!objects.empty()) {
-        returnObjects = objects;
-    }
 
-    const float halfWidth = height * 0.5f;
+    if (level == maxLevel)
+        return objects;
+
+    if (!objects.empty())
+        returnObjects = objects;
+
+    const float halfWidth  = height * 0.5f;
     const float halfHeight = height * 0.5f;
 
     if (_x > x + halfWidth && _x < x + width) {
         if (_y > y + halfHeight && _y < y + height) {
             childReturnObjects = SE->GetObjectsAt(_x, _y);
             returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-            return returnObjects;
         } else if (_y > y && _y <= y + halfHeight) {
             childReturnObjects = NE->GetObjectsAt(_x, _y);
             returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-            return returnObjects;
         }
     } else if (_x > x && _x <= x + halfWidth) {
         if (_y > y + halfHeight && _y < y + height) {
             childReturnObjects = SW->GetObjectsAt(_x, _y);
             returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-            return returnObjects;
         } else if (_y > y && _y <= y + halfHeight) {
             childReturnObjects = NW->GetObjectsAt(_x, _y);
             returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-            return returnObjects;
         }
     }
 
@@ -95,19 +82,15 @@ vector<Object*> Quadtree::GetObjectsAt(float _x, float _y) {
 }
 
 void Quadtree::Clear() {
-    if (level == maxLevel) {
-        objects.clear();
-        return;
-    } else {
+    if (level < maxLevel) {
         NW->Clear();
         NE->Clear();
         SW->Clear();
         SE->Clear();
     }
 
-    if (!objects.empty()) {
+    if (!objects.empty())
         objects.clear();
-    }
 }
 
 bool Quadtree::contains(Quadtree *child, Object *object) {
