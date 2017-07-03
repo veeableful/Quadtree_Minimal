@@ -60,23 +60,19 @@ vector<Object*> Quadtree::GetObjectsAt(float _x, float _y) {
     const float halfWidth  = width * 0.5f;
     const float halfHeight = height * 0.5f;
 
-    if (_x > x + halfWidth && _x < x + width) {
-        if (_y > y + halfHeight && _y < y + height) {
+    if (_x > x + halfWidth && _x < x + width)
+        if (_y > y + halfHeight && _y < y + height)
             childReturnObjects = SE->GetObjectsAt(_x, _y);
-            returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-        } else if (_y > y && _y <= y + halfHeight) {
+        else if (_y > y && _y <= y + halfHeight)
             childReturnObjects = NE->GetObjectsAt(_x, _y);
-            returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-        }
-    } else if (_x > x && _x <= x + halfWidth) {
-        if (_y > y + halfHeight && _y < y + height) {
+    else if (_x > x && _x <= x + halfWidth)
+        if (_y > y + halfHeight && _y < y + height)
             childReturnObjects = SW->GetObjectsAt(_x, _y);
-            returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-        } else if (_y > y && _y <= y + halfHeight) {
+        else if (_y > y && _y <= y + halfHeight)
             childReturnObjects = NW->GetObjectsAt(_x, _y);
-            returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
-        }
-    }
+
+    if (childReturnObjects.size() > 0)
+        returnObjects.insert(returnObjects.end(), childReturnObjects.begin(), childReturnObjects.end());
 
     return returnObjects;
 }
